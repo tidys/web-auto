@@ -1,68 +1,51 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the action will run. 
+name: Build Electron
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    tags:
+      - 'v*.*.*'
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: build electron app
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019, macos-10.15]    
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: 更新代码
+        uses: actions/checkout@v2
+      - name: 安装nodejs
+        uses: actions/setup-node@v2-beta
+      - name: 全局安装electron-builder
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          
-      - name: Electron Builder Action
-      # You may pin to the exact commit or the version.
-      # uses: samuelmeuli/action-electron-builder@92327c67bc45ff7c38bf55d8aa8c4d75b7ea38e7
-        uses: samuelmeuli/action-electron-builder@v1.6.0
+          npm install electron-builder -g
+      - name: 安装node_modules依赖
+        run: |
+          npm install
+      - name: 打包window包
+        if: matrix.os == 'windows-2019'
+        run: |
+          npm run build-win
+      - name: 打包mac包
+        if: matrix.os == 'macos-10.15'
+        run: |
+          npm run build-mac
+
+      - name: 上传打包文件
+        uses: actions/upload-artifact@v2
         with:
-          # GitHub authentication token
-          github_token: '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'
-          # Base64-encoded code signing certificate for macOS
-          mac_certs: 'mac'# optional
-          # Password for decrypting `mac_certs`
-          mac_certs_password: 'pwd' # optional
-          # Whether the app should be released after a successful build
-          release: "true"  # optional
-          # Base64-encoded code signing certificate for Windows
-          windows_certs: 'win' # optional
-          # Password for decrypting `windows_certs`
-          windows_certs_password: 'pwd' # optional
-          # Directory where NPM/Yarn commands should be run
-          package_root: './' # optional, default is .
-          # Name of the optional NPM build script which is executed before `electron-builder`
-          build_script_name: './index.js' # optional, default is build
-          # Whether the action should execute the NPM build script before running `electron-builder`
-          skip_build: "false" # optional
-          # Whether to run `electron-builder` using the Vue CLI plugin instead of calling the command directly
-          use_vue_cli: "false" # optional
-          # Other arguments to pass to the `electron-builder` command, e.g. configuration overrides
-          args: "" # optional, default is 
-          # Maximum number of attempts for completing the build and release step
-          max_attempts: 1 # optional, default is 1
-          # Directory where `electron-builder` commands should be run
-          app_root: './' # optional
+          name: ${{ matrix.os }}
+          path: dist
+          
+      - name: 清理打包文件
+        run: |
+          npx rimraf "dist/!(*.exe|*.dmg)"  
+          
+      - name: 发布release版本
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: "dist/**"
+        env:
+          GITHUB_TOKEN: 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
+     
+       
