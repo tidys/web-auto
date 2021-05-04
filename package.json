@@ -6,6 +6,22 @@
   "scripts": {
     "run": "electron ./"
   },
+  "build": {
+    "appId": "com.xuyanfeng.web-auto",
+    "electronVersion": "5.0.0",
+    "productName": "WebAuto",
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "asar": true,
+      "target": [
+        "zip"
+      ]
+    }
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
