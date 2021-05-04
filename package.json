@@ -1,0 +1,17 @@
+{
+  "name": "neteasy-browser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "electron ./"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/fs-extra": "^8.0.1",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.6",
+    "electron": "5.0.0"
+  }
+}
