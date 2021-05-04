@@ -25,10 +25,14 @@ jobs:
         if: matrix.os == 'windows-2019'
         run: |
           npm run build-win
+        env:
+          GH_TOKEN: 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
       - name: 打包mac包
         if: matrix.os == 'macos-10.15'
         run: |
           npm run build-mac
+        env:
+          GH_TOKEN: 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
 
       - name: 上传打包文件
         uses: actions/upload-artifact@v2
