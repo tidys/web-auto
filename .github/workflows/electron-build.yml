@@ -42,15 +42,15 @@ jobs:
           name: ${{ matrix.os }}
           path: dist
 
-      #      - name: 清理mac打包文件
-      #        if: matrix.os == 'macos-10.15'
-      #        run: |
-      #          npx rimraf "dist/!(*.dmg)"
-      #
-      #      - name: 清理win打包文件
-      #        if: matrix.os == 'windows-latest'
-      #        run: |
-      #          npx rimraf "dist/!(*.exe)"
+      - name: 清理mac临时打包文件
+        if: matrix.os == 'macos-10.15'
+        run: |
+          npx rimraf "dist/!(*.dmg)"
+
+      - name: 清理win打包文件
+        if: matrix.os == 'windows-latest'
+        run: |
+          npx rimraf "dist/!(*.exe)"
 
       - name: 发布release版本
         uses: softprops/action-gh-release@v1
