@@ -65,8 +65,8 @@ new Vue({
                 let webview = this.$refs.webview;
                 if (webview) {
                     if (ActionCB.hasOwnProperty(action)) {
-                        reject(`队列中存在[${action}]操作`)
-                        return;
+                        cc.warn(`队列中存在[${action}]操作`)
+                        delete ActionCB[action];
                     }
                     if (data.hasOwnProperty('action')) {
                         reject(`参数不能使用action字段`);

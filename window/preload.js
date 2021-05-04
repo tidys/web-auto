@@ -103,15 +103,21 @@ var preload = {
                         let spans = dom.find(item, 'span');
                         if (spans[0].innerText === '其他') {
                             item.click();
-
+                            console.log(spans[0].innerText);
                         }
                     }
                 }
                 let arrowUp = dom.find(container, '.arrow-up');
-                if (arrowUp) {
+                if (arrowUp && !(arrowUp instanceof window.HTMLCollection)) {
                     arrowUp.click();
                 }
             }
+
+            // 循环检索
+            function ff () {
+
+            }
+
             let area = dom.$('#sellerRefuseTextArea_30');
             if (area) {
                 let textContent = dom.find(area, '.textarea-content');
@@ -120,7 +126,7 @@ var preload = {
                     if (textarea) {
                         setTimeout(() => {
                             textarea.value = '亲，现在店铺倒闭，已经被封了，已经不能正常退款，您说下您的支付宝号或者收款码发给客服，然后把钱直接转给您'
-                        }, 1300)
+                        }, 3000);
                     }
                 }
             }

@@ -569,3 +569,15 @@ d = {
         }
     }, "success": true
 }
+var func = localStorage.setItem
+localStorage.setItem = (name, value) => {
+    console.log(name, value)
+    func(name, value);
+}
+
+Object.defineProperty(window.localStorage, 'tfstk__', {
+    set: (value) => {
+        debugger
+    }
+})
+
