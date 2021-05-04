@@ -27,13 +27,13 @@ jobs:
         run: |
           npm run build-win
         env:
-          GH_TOKEN: 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
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
       - name: 打包mac包
         if: matrix.os == 'macos-10.15'
         run: |
           npm run build-mac
         env:
-          GH_TOKEN: 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
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       - name: 上传打包文件
         uses: actions/upload-artifact@v2
@@ -57,4 +57,4 @@ jobs:
         with:
           files: "dist/**"
         env:
-          GITHUB_TOKEN: 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
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
