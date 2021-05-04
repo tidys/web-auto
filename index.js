@@ -2,6 +2,7 @@ let Electron = require("electron");
 const { app } = Electron;
 const BrowserWindow = Electron.BrowserWindow;
 const Path = require("path");
+const { isDev } = require('./core/dev')
 app.on("ready", function () {
     let win = new BrowserWindow({
         width: 950,
@@ -17,7 +18,9 @@ app.on("ready", function () {
     });
     win.loadFile(Path.join(__dirname, 'window/index.html'));
     win.show();
-    win.openDevTools();
+    if (isDev()) {
+        win.openDevTools();
+    }
 });
 app.on("window-all-closed", function () {
     app.quit();

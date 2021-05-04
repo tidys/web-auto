@@ -33,7 +33,10 @@ new Vue({
         let webview = this.$refs.webview;
         if (webview) {
             webview.addEventListener('dom-ready', () => {
-                webview.openDevTools();
+                const { isDev } = require('../core/dev')
+                if (isDev()) {
+                    webview.openDevTools();
+                }
             })
             webview.addEventListener('new-window', (e) => {
                 // window.open(e.url);
