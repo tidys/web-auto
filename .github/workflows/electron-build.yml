@@ -23,6 +23,11 @@ jobs:
       - name: 安装node_modules依赖
         run: |
           npm install
+
+      - name: 执行build.js处理
+        run: |
+          node ./build.js
+
       - name: 打包window包
         if: matrix.os == 'windows-latest'
         run: |
